@@ -1,4 +1,5 @@
 # Ref: https://github.com/vikhyat/moondream
+import time
 from urllib.request import urlopen
 
 import torch
@@ -22,14 +23,30 @@ image = Image.open(
 )
 
 # Single inference
+start_time = time.time()
 enc_image = model.encode_image(image)
-print(model.answer_question(enc_image, "Describe this image.", tokenizer))
+answer = model.answer_question(enc_image, "Describe this image.", tokenizer)
+single_inference_time = time.time() - start_time
+
+print(answer)
+print(f"Single inference time: {single_inference_time:.2f} seconds")
 
 # Batch inference
+start_time = time.time()
+
+
+batch_size = 10
+images = [image] * batch_size
+prompts = ["Describe this image."] * batch_size
+
 answers = model.batch_answer(
-    images=[image, image],
-    prompts=["Describe this image.", "Are there people in this image?"],
+    images=images,
+    prompts=prompts,
     tokenizer=tokenizer,
 )
+batch_inference_time = time.time() - start_time
 
 print(answers)
+print(
+    f"Batch inference time: {batch_inference_time:.2f} seconds for {batch_size} images"
+)
