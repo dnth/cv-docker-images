@@ -1,2 +1,4 @@
-transformers==4.45.2
-einops
+torch==2.2.0
+transformers==4.42.4
+torchvision==0.17.0
+einops==0.8.0
