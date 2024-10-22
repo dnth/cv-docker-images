@@ -18,16 +18,13 @@ Download the flash attention wheel
 wget https://github.com/dnth/cv-docker-images/releases/download/v0.0.0/flash_attn-2.6.3-cp310-cp310-linux_x86_64.whl
 ```
 
-To run the model, you can build and run the Docker container as follows:
-
-- Build Docker Image
+Build image:
 
 ```bash
 docker build -t moondream2 .
 ```
 
-
-- Run Docker Container
+Run container after build completes:
 
 To use GPU, you need to run the container with the `--gpus` flag.
 ```bash
@@ -36,6 +33,7 @@ docker run --gpus all -it moondream2
 
 
 ## Run from Docker Hub
+Optionally, you can pull the pre-built image from Docker Hub without having to build the image yourself.
 
 ```bash
 docker run --gpus all -it dnth/moondream2
