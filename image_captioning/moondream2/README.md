@@ -26,10 +26,11 @@ docker build -t moondream2 .
 
 Run container after build completes:
 
-To use GPU, you need to run the container with the `--gpus` flag.
 ```bash
 docker run --gpus all -it moondream2
 ```
+
+Note: To use GPU, you need to run the container with the `--gpus` flag.
 
 
 ## Run from Docker Hub
