@@ -23,10 +23,6 @@ def load_model_and_tokenizer(model_id, revision, cache_dir="moondream2"):
     return model, tokenizer
 
 
-def load_image_from_url(url):
-    return Image.open(urlopen(url))
-
-
 def single_inference(model, tokenizer, image, question):
     start_time = time.time()
     enc_image = model.encode_image(image)
@@ -55,7 +51,7 @@ def main():
     model, tokenizer = load_model_and_tokenizer(model_id, revision)
 
     image_url = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/beignets-task-guide.png"
-    image = load_image_from_url(image_url)
+    image = Image.open(urlopen(image_url))
 
     # Single inference
     question = "Describe this image."
