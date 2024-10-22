@@ -1,6 +1,7 @@
 # Model files
 *.pt
 *.pth
+*.whl
 image_captioning/moondream2/moondream2/*
 
 

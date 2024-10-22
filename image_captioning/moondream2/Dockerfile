@@ -8,7 +8,11 @@ RUN apt-get update && apt-get install -y python3-pip && \
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-    
+
+# Copy flash-attn wheel
+COPY flash_attn-2.6.3-cp310-cp310-linux_x86_64.whl .
+RUN pip install flash_attn-2.6.3-cp310-cp310-linux_x86_64.whl
+
 COPY . /app
 
 # Copy model files to be part of the Docker image
