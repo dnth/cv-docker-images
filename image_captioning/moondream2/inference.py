@@ -16,6 +16,8 @@ def load_model_and_tokenizer(model_id, revision, cache_dir="moondream2"):
     model = AutoModelForCausalLM.from_pretrained(
         model_id, trust_remote_code=True, revision=revision, cache_dir=cache_dir
     ).to(device=device, dtype=dtype)
+    model.eval()
+    model = torch.compile(model, mode="max-autotune")
     tokenizer = AutoTokenizer.from_pretrained(model_id, revision=revision)
 
     return model, tokenizer
