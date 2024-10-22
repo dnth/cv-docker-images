@@ -8,7 +8,7 @@ Prerequisite:
 > [!NOTE]
 > Only tested on Linux machine with GPU.
 
-To run this model, you can build the Docker container yourself or use the pre-built image from Docker Hub.
+To run this model, you can build the Docker image yourself or use the pre-built image from Docker Hub.
 
 ## Build the Docker image
 
