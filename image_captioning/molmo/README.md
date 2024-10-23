@@ -34,8 +34,10 @@ docker run --gpus all -it molmo
 ```
 
 ## Run from Docker Hub
-Alternatively, you can run the container from Docker Hub without going through the hussle of building the image yourself:
+Alternatively, you can run the container from Docker Hub without going through the hassle of building the image yourself:
 
 ```bash
 docker run --gpus all -it dnth/molmo
 ```
+
+Note: The model weights (32GB) is part of the container image, so it might take a while to download. 
