@@ -1,5 +1,6 @@
 # Molmo
-Setup and run Molmo-7B-D-0924 for image captioning.
+Setup and run [Molmo-7B-D-0924](https://huggingface.co/allenai/Molmo-7B-D-0924) for image captioning.
+
 
 ## Installation
 
