@@ -12,4 +12,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 COPY molmo_7b_d_0924 /app/molmo_7b_d_0924
 
+COPY sample_images /app/sample_images
+
 CMD ["python", "inference.py"]
