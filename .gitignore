@@ -3,6 +3,7 @@
 *.pth
 *.whl
 image_captioning/moondream2/moondream2/*
+image_captioning/molmo/molmo_7b_d_0924/*
 
 
 # Byte-compiled / optimized / DLL files
