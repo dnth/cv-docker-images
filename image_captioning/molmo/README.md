@@ -9,9 +9,19 @@ With pip:
 pip install -r requirements.txt
 ```
 
+```python
+python inference.py
+```
+
 With Docker:
 
 ```bash
 docker build -t molmo .
-docker run -it molmo
+docker run --gpus all -it molmo
+```
+
+## Run from Docker Hub
+
+```bash
+docker run --gpus all -it dnth/molmo
 ```

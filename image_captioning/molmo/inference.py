@@ -37,10 +37,13 @@ if __name__ == "__main__":
         model_path = "allenai/Molmo-7B-D-0924"
 
     model = Molmo(model_path)
+
+    # Probably wise to limit the number of images to about 10. It almost takes up 24GB VRAM.
     images = [
         Image.open("../../sample_images/0a6ee446579d2885.jpg"),
         Image.open("../../sample_images/0a8caaad03cfd733.jpg"),
         Image.open("../../sample_images/0a76d1694905b51d.jpg"),
         Image.open("../../sample_images/0a763eb264e84549.jpg"),
     ]
+
     print(model.run_inference(images))
