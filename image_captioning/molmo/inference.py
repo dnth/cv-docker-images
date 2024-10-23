@@ -1,9 +1,11 @@
 import os
 from abc import ABCMeta
 
+import PIL
 import torch
+from loguru import logger
 from PIL.Image import Image
-from vllm import LLM
+from vllm import LLM, SamplingParams
 
 
 class BaseGPUModel(metaclass=ABCMeta):
@@ -27,8 +29,23 @@ class Molmo(BaseGPUModel):
         super().__init__()
         self.model = LLM(model=model_path, trust_remote_code=True, dtype=self.dtype)
 
+        logger.info(f"Initialized Molmo model from: {model_path}")
+        logger.info(f"Using device: {self.device}, dtype: {self.dtype}")
+
     def run_inference(self, images: list[Image]) -> list[str]:
-        print(f"Running inference on {len(images)} images")
+        prompt = "Describe the image."
+        sampling_params = SamplingParams(temperature=0.0, max_tokens=20)
+
+        batch_inputs = [
+            {
+                "prompt": f"USER: <image>\n{prompt}\nASSISTANT:",
+                "multi_modal_data": {"image": image.convert("RGB")},
+            }
+            for image in images
+        ]
+
+        results = self.model.generate(batch_inputs, sampling_params)
+        return [output.outputs[0].text for output in results]
 
 
 if __name__ == "__main__":
@@ -38,4 +55,5 @@ if __name__ == "__main__":
         model_path = "allenai/Molmo-7B-D-0924"
 
     model = Molmo(model_path)
-    model.run_inference([])
+    images = [PIL.Image.open("../../sample_images/0a6ee446579d2885.jpg")]
+    print(model.run_inference(images))
