@@ -3,24 +3,38 @@ Setup and run Molmo-7B-D-0924 for image captioning.
 
 ## Installation
 
-With pip:
+You can run the model with pip or Docker.
+
+### Pip
+
+Make sure you have Python 3.10 or higher and cuda 12.1 or higher.
+
+First, install the requirements:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+Run the inference script:
 ```python
 python inference.py
 ```
 
-With Docker:
+### Docker
 
+Build the image:
 ```bash
 docker build -t molmo .
+```
+
+Run the container:
+
+```bash
 docker run --gpus all -it molmo
 ```
 
 ## Run from Docker Hub
+Alternatively, you can run the container from Docker Hub without going through the hussle of building the image yourself:
 
 ```bash
 docker run --gpus all -it dnth/molmo
