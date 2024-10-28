@@ -1,6 +1,3 @@
-# First install the required package
-# pip install "paddleocr>=2.7.0"
-
 import time
 
 import cv2
@@ -38,11 +35,11 @@ def inference(model, image_path):
             - text: The detected text string
             - confidence: Detection confidence score
             - bbox: Dictionary with x, y, width, height of the bounding box
-        float: Inference time in seconds
     """
     start_time = time.time()
     result = model.ocr(image_path)
     inference_time = time.time() - start_time
+    print(f"\nInference Time: {inference_time:.4f} seconds")
 
     detected_text = []
     for idx in range(len(result)):
@@ -70,61 +67,28 @@ def inference(model, image_path):
                 }
             )
 
-    return detected_text, inference_time
+    return detected_text
 
 
-def get_text_in_region(detected_text, x, y, width, height):
-    """
-    Filter text detections that fall within a specified region
-    """
-    results = []
-    for item in detected_text:
-        bbox = item["bbox"]
-        # Check if the center of the text box falls within the region
-        text_center_x = bbox["x"] + bbox["width"] / 2
-        text_center_y = bbox["y"] + bbox["height"] / 2
+def visualize_results(img: str, detected_text: list):
+    img = plt.imread(img)
 
-        if x <= text_center_x <= x + width and y <= text_center_y <= y + height:
-            results.append(item)
-    return results
-
-
-def visualize_results(img, detected_text, show_upright_bbox=True):
-    """
-    Visualize detection results on the image
-    """
     plt.figure(figsize=(15, 15))
     plt.imshow(img)
 
     for item in detected_text:
-        # Draw original quadrilateral bounding box (red)
-        position = item["position"]
-        plt.plot(
-            [position[0][0], position[1][0]], [position[0][1], position[1][1]], "r-"
-        )
-        plt.plot(
-            [position[1][0], position[2][0]], [position[1][1], position[2][1]], "r-"
-        )
-        plt.plot(
-            [position[2][0], position[3][0]], [position[2][1], position[3][1]], "r-"
-        )
-        plt.plot(
-            [position[3][0], position[0][0]], [position[3][1], position[0][1]], "r-"
-        )
+        bbox = item["bbox"]
+        x, y = bbox["x"], bbox["y"]
+        w, h = bbox["width"], bbox["height"]
 
-        if show_upright_bbox:
-            # Draw minimal upright bounding rectangle (blue)
-            bbox = item["bbox"]
-            x, y = bbox["x"], bbox["y"]
-            w, h = bbox["width"], bbox["height"]
-            plt.plot([x, x + w, x + w, x, x], [y, y, y + h, y + h, y], "b--", alpha=0.5)
+        plt.plot([x, x + w, x + w, x, x], [y, y, y + h, y + h, y], "r-", linewidth=2)
 
-        # Add text annotation
         plt.text(
-            position[0][0],
-            position[0][1],
+            x,
+            y - 5,
             f"{item['text']} ({item['confidence']:.2f})",
             bbox=dict(facecolor="white", alpha=0.7),
+            fontsize=8,
         )
 
     plt.axis("off")
@@ -133,20 +97,19 @@ def visualize_results(img, detected_text, show_upright_bbox=True):
 
 # Example usage
 if __name__ == "__main__":
-    # Initialize OCR
     model = load_model()
 
-    # Process an image
     image_path = "sample_image.png"
-    detected_text, inference_time = inference(model, image_path)
+    detected_text = inference(model, image_path)
 
-    # Print inference time
-    print(f"\nInference Time: {inference_time:.4f} seconds")
+    print(detected_text)
 
-    # Print detected text and bounding boxes
-    print("\nDetected Text and Bounding Boxes:")
-    for item in detected_text:
-        print(f"Text: {item['text']}")
-        print(f"Confidence: {item['confidence']:.2f}")
-        print(f"Bounding Box: {item['bbox']}")
-        print("---")
+    visualize_results(image_path, detected_text)
+
+    # # Print detected text and bounding boxes
+    # print("\nDetected Text and Bounding Boxes:")
+    # for item in detected_text:
+    #     print(f"Text: {item['text']}")
+    #     print(f"Confidence: {item['confidence']:.2f}")
+    #     print(f"Bounding Box: {item['bbox']}")
+    #     print("---")
