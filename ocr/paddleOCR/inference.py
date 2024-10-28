@@ -6,18 +6,17 @@ import numpy as np
 from paddleocr import PaddleOCR
 
 
-def load_model(use_gpu=False, lang="en"):
+def load_model(use_gpu=False):
     """
     Initialize and return a PaddleOCR model
     Args:
         use_gpu (bool): Whether to use GPU
-        lang (str): Language code for the model
     Returns:
         PaddleOCR model instance
     """
     return PaddleOCR(
         use_angle_cls=True,
-        lang=lang,
+        lang="en",
         use_gpu=use_gpu,
         ocr_version="PP-OCRv4",
         show_log=False,
@@ -37,37 +36,26 @@ def inference(model, image_path):
             - bbox: Dictionary with x, y, width, height of the bounding box
     """
     start_time = time.time()
-    result = model.ocr(image_path)
+    ocr_results = model.ocr(image_path)
     inference_time = time.time() - start_time
     print(f"\nInference Time: {inference_time:.4f} seconds")
 
-    detected_text = []
-    for idx in range(len(result)):
-        res = result[idx]
-        for line in res:
-            position = line[0]
-            text = line[1][0]
-            confidence = line[1][1]
+    detected_regions = []
+    for text_regions in ocr_results:
+        for region in text_regions:
+            bbox_points, (text, confidence) = region
+            points_array = np.array(bbox_points, dtype=np.float32)
+            x, y, w, h = map(int, cv2.boundingRect(points_array))
 
-            # Calculate bounding box
-            points = np.array(position, dtype=np.float32)
-            rect = cv2.boundingRect(points)
-            bbox = {
-                "x": int(rect[0]),
-                "y": int(rect[1]),
-                "width": int(rect[2]),
-                "height": int(rect[3]),
-            }
-
-            detected_text.append(
+            detected_regions.append(
                 {
                     "text": text,
                     "confidence": confidence,
-                    "bbox": bbox,
+                    "bbox": {"x": x, "y": y, "width": w, "height": h},
                 }
             )
 
-    return detected_text
+    return detected_regions
 
 
 def visualize_results(img: str, detected_text: list):
