@@ -19,7 +19,7 @@ def load_model(use_gpu=False):
         lang="en",
         use_gpu=use_gpu,
         ocr_version="PP-OCRv4",
-        show_log=False,
+        show_log=True,
     )
 
 
